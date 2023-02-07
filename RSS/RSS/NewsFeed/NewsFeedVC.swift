@@ -9,13 +9,21 @@ import Foundation
 import UIKit
 
 class NewsFeedVC: UIViewController {
-    
+    weak var delegateSideMenu: SideMenuDelegate?
     private let viewModel: NewsFeedViewModel
+    private let sideMenu = ContainerVC()
+    
+    private lazy var menuButton: UIBarButtonItem = {
+        let view = UIBarButtonItem(image: UIImage(systemName: "list.dash"), style: .plain, target: self, action: #selector(menuTapped))
+        view.tintColor = Constants.Colors.grey
+        return view
+    }()
     
     private var collectionView: UICollectionView = {
         let flow = UICollectionViewFlowLayout()
         flow.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         flow.minimumLineSpacing = 20
+        
         let view = UICollectionView(frame: .zero, collectionViewLayout: flow)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = Constants.Colors.backgroundWhite
@@ -36,15 +44,17 @@ class NewsFeedVC: UIViewController {
     override func viewDidLoad() {
         setupViews()
         makeConstraints()
+        setupGestures()
         view.backgroundColor = Constants.Colors.backgroundWhite
-        collectionView.register(CustomCell.self, forCellWithReuseIdentifier: CustomCell.identifire)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.alwaysBounceVertical = true
     }
     
     private func setupViews(){
         view.addSubview(collectionView)
+        view.addSubview(sideMenu.view)
+        collectionView.register(CustomCell.self, forCellWithReuseIdentifier: CustomCell.identifire)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        navigationItem.setLeftBarButton(menuButton, animated: false)
     }
     private func makeConstraints(){
         collectionView.snp.makeConstraints { make in
@@ -52,6 +62,38 @@ class NewsFeedVC: UIViewController {
             make.right.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.bottom.equalToSuperview()
+        }
+    }
+    private func setupGestures(){
+        let tapSwipedLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipedLeft))
+        tapSwipedLeft.direction = .left
+        tapSwipedLeft.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapSwipedLeft)
+        
+        let tapSwipedRight = UISwipeGestureRecognizer(target: self, action: #selector(menuTapped))
+        tapSwipedRight.direction = .right
+        tapSwipedRight.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapSwipedRight)
+    }
+    
+    @objc private func menuTapped(){
+        sideMenu.show()
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut){
+            self.navigationController?.navigationBar.layer.opacity = 0
+            self.view.backgroundColor = Constants.Colors.grey
+            self.collectionView.backgroundColor = Constants.Colors.grey
+            self.collectionView.layer.opacity = 0.5
+            self.menuButton.isEnabled = false
+        } 
+    }
+    @objc private func swipedLeft(){
+        sideMenu.hide()
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseInOut){
+            self.navigationController?.navigationBar.layer.opacity = 1
+            self.collectionView.backgroundColor = Constants.Colors.backgroundWhite
+            self.view.backgroundColor = Constants.Colors.backgroundWhite
+            self.collectionView.layer.opacity = 1
+            self.menuButton.isEnabled = true
         }
     }
 }

@@ -25,6 +25,11 @@
 		05B009BA29910367008E622E /* NewsFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009B929910367008E622E /* NewsFeedViewModel.swift */; };
 		05B009BC29910378008E622E /* NewsFeedRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009BB29910378008E622E /* NewsFeedRoute.swift */; };
 		05B009C0299119F0008E622E /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009BF299119EF008E622E /* CustomCell.swift */; };
+		05B009C629925F4F008E622E /* SideMenuProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009C529925F4E008E622E /* SideMenuProtocol.swift */; };
+		05B009C829926A02008E622E /* SubscriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009C729926A02008E622E /* SubscriptionVC.swift */; };
+		05B009CA29926A10008E622E /* LaterNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009C929926A10008E622E /* LaterNewsVC.swift */; };
+		05B009CC29926A20008E622E /* FavoriteNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009CB29926A20008E622E /* FavoriteNewsVC.swift */; };
+		05B009CE29926A98008E622E /* ContainerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05B009CD29926A98008E622E /* ContainerVC.swift */; };
 		05CBC55C286722E400381BEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBC55B286722E400381BEF /* AppDelegate.swift */; };
 		05CBC55E286722E400381BEF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBC55D286722E400381BEF /* SceneDelegate.swift */; };
 		05CBC560286722E400381BEF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CBC55F286722E400381BEF /* ViewController.swift */; };
@@ -53,6 +58,11 @@
 		05B009B929910367008E622E /* NewsFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewModel.swift; sourceTree = "<group>"; };
 		05B009BB29910378008E622E /* NewsFeedRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedRoute.swift; sourceTree = "<group>"; };
 		05B009BF299119EF008E622E /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		05B009C529925F4E008E622E /* SideMenuProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuProtocol.swift; sourceTree = "<group>"; };
+		05B009C729926A02008E622E /* SubscriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionVC.swift; sourceTree = "<group>"; };
+		05B009C929926A10008E622E /* LaterNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaterNewsVC.swift; sourceTree = "<group>"; };
+		05B009CB29926A20008E622E /* FavoriteNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FavoriteNewsVC.swift; path = RSS/LaterNews/FavoriteNewsVC.swift; sourceTree = SOURCE_ROOT; };
+		05B009CD29926A98008E622E /* ContainerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerVC.swift; sourceTree = "<group>"; };
 		05CBC558286722E400381BEF /* RSS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RSS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05CBC55B286722E400381BEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		05CBC55D286722E400381BEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +154,7 @@
 				05B009B729910353008E622E /* NewsFeedVC.swift */,
 				05B009B929910367008E622E /* NewsFeedViewModel.swift */,
 				05B009BB29910378008E622E /* NewsFeedRoute.swift */,
+				05B009CD29926A98008E622E /* ContainerVC.swift */,
 			);
 			path = NewsFeed;
 			sourceTree = "<group>";
@@ -159,6 +170,7 @@
 		05B009C129925E1C008E622E /* FavoriteNews */ = {
 			isa = PBXGroup;
 			children = (
+				05B009CB29926A20008E622E /* FavoriteNewsVC.swift */,
 			);
 			path = FavoriteNews;
 			sourceTree = "<group>";
@@ -166,6 +178,7 @@
 		05B009C229925E31008E622E /* LaterNews */ = {
 			isa = PBXGroup;
 			children = (
+				05B009C929926A10008E622E /* LaterNewsVC.swift */,
 			);
 			path = LaterNews;
 			sourceTree = "<group>";
@@ -173,8 +186,17 @@
 		05B009C329925E3C008E622E /* SubscriptionsNews */ = {
 			isa = PBXGroup;
 			children = (
+				05B009C729926A02008E622E /* SubscriptionVC.swift */,
 			);
 			path = SubscriptionsNews;
+			sourceTree = "<group>";
+		};
+		05B009C429925F2D008E622E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				05B009C529925F4E008E622E /* SideMenuProtocol.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		05CBC54F286722E400381BEF = {
@@ -198,6 +220,7 @@
 		05CBC55A286722E400381BEF /* RSS */ = {
 			isa = PBXGroup;
 			children = (
+				05B009C429925F2D008E622E /* Protocols */,
 				05B009C329925E3C008E622E /* SubscriptionsNews */,
 				05B009C229925E31008E622E /* LaterNews */,
 				05B009C129925E1C008E622E /* FavoriteNews */,
@@ -360,13 +383,18 @@
 				05B009AF29910114008E622E /* EmptyTransition.swift in Sources */,
 				05B009AD299100FF008E622E /* ModalTransition.swift in Sources */,
 				05B009B12991012D008E622E /* PushTransition.swift in Sources */,
+				05B009CE29926A98008E622E /* ContainerVC.swift in Sources */,
 				05B009B829910353008E622E /* NewsFeedVC.swift in Sources */,
 				05CBC560286722E400381BEF /* ViewController.swift in Sources */,
 				05CBC55C286722E400381BEF /* AppDelegate.swift in Sources */,
 				05B009BA29910367008E622E /* NewsFeedViewModel.swift in Sources */,
 				05B009AB299100E6008E622E /* RouterProtocol.swift in Sources */,
+				05B009CC29926A20008E622E /* FavoriteNewsVC.swift in Sources */,
 				05CBC55E286722E400381BEF /* SceneDelegate.swift in Sources */,
 				05B009972990F69C008E622E /* Constants.swift in Sources */,
+				05B009C629925F4F008E622E /* SideMenuProtocol.swift in Sources */,
+				05B009C829926A02008E622E /* SubscriptionVC.swift in Sources */,
+				05B009CA29926A10008E622E /* LaterNewsVC.swift in Sources */,
 				05B009C0299119F0008E622E /* CustomCell.swift in Sources */,
 				05B009B32991014F008E622E /* MainRouter.swift in Sources */,
 			);
