@@ -13,42 +13,42 @@ class CustomCell: UICollectionViewCell {
     static let identifire = "CustomCell"
     
     
-    var imageViewNews: UIImageView = {
+    private var imageViewNews: UIImageView = {
        let view = UIImageView()
         view.image = UIImage(systemName: "heart")
-        view.contentMode = .scaleAspectFit
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 10
         return view
     }()
     
-    var titleNews: UILabel = {
+    private var titleNews: UILabel = {
         let view = UILabel()
         view.text = "Самое зрелищное шоу пройдет сегодня в Москве"
         view.contentMode = .scaleAspectFit
-        view.lineBreakMode = .byWordWrapping
         view.numberOfLines = 0
         view.font = Constants.Fonts.titlePostOpenSans_Regular24
         view.textColor = Constants.Colors.black
         return view
     }()
     
-    var descriptionNews: UILabel = {
+    private var descriptionNews: UILabel = {
        let view = UILabel()
         view.text = "уоавлыдвоадл олдлвоафолдыаод фофд одлыао фоыа дфаы лол афуоавлыдвоадл олдлвоафолдыаод фофд одлыао фоыа дфаы лол афуоавлыдвоадл олдлвоафолдыаод фофд одлыао фоыа дфаы лол аф"
         view.numberOfLines = 3
-        view.lineBreakMode = .byWordWrapping
         view.font = Constants.Fonts.descriptionPostOpenSans_Regular14
         view.textColor = Constants.Colors.grey
         return view
     }()
     
-    var sourceNews: UILabel = {
+    private var sourceNews: UILabel = {
        let view = UILabel()
         view.text = "Village.ru"
-        view.font = Constants.Fonts.descriptionPostOpenSans_Regular14
+        view.font = Constants.Fonts.sourcePostOpenSans_SemiBold14
         view.textColor = Constants.Colors.lightGreenText
         return view
     }()
-    var postedTimeNews: UILabel = {
+    private var postedTimeNews: UILabel = {
         let view = UILabel()
         view.text = "25 мин.назад"
         view.font = Constants.Fonts.sourcePostOpenSans_SemiBold14
@@ -56,14 +56,14 @@ class CustomCell: UICollectionViewCell {
         return view
     }()
     
-    var stackText: UIStackView = {
+    private var stackText: UIStackView = {
         let view = UIStackView()
         view.axis = .vertical
         view.spacing = 10
         return view
     }()
     
-    var stackButtons: UIStackView = {
+    private var stackButtons: UIStackView = {
         let favButton = UIButton()
         favButton.setImage(UIImage(systemName: "heart"), for: .normal)
         let laterButton = UIButton()
@@ -78,18 +78,18 @@ class CustomCell: UICollectionViewCell {
         view.addArrangedSubview(shareButton)
         return view
     }()
-    var labelempty: UILabel = {
+    private var labelempty: UILabel = {
        let view = UILabel()
         view.text = " "
         return view
     }()
-    var stackInfos: UIStackView = {
+    private var stackInfos: UIStackView = {
        let view = UIStackView()
         view.axis = .vertical
         return view
     }()
     
-    var stackBottom: UIStackView = {
+    private var stackBottom: UIStackView = {
        let view = UIStackView()
         view.axis = .horizontal
         return view
@@ -126,7 +126,7 @@ class CustomCell: UICollectionViewCell {
         imageViewNews.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.left.right.equalToSuperview()
-            make.height.equalTo(130)
+            make.height.equalTo(150)
         }
         stackText.snp.makeConstraints { make in
             make.top.equalTo(imageViewNews.snp.bottom).offset(20)
@@ -136,7 +136,7 @@ class CustomCell: UICollectionViewCell {
         stackBottom.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(20)
             make.right.equalToSuperview().inset(20)
-            make.bottom.equalToSuperview().inset(30)
+            make.bottom.equalToSuperview().inset(20)
             make.height.equalTo(40)
             make.top.equalTo(stackText.snp.bottom).offset(30)
         }
@@ -154,5 +154,12 @@ class CustomCell: UICollectionViewCell {
     
     func setupLayouts(view: UICollectionView){
         self.widthAnchor.constraint(equalToConstant: view.bounds.size.width - 30).isActive = true
+    }
+    func makeCell(title: String, description: String, source: String, date: String, image: UIImage){
+        self.imageViewNews.image = image
+        self.titleNews.text = title
+        self.descriptionNews.text = description
+        self.sourceNews.text = source
+        self.postedTimeNews.text = date
     }
 }

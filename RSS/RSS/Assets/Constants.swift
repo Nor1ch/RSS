@@ -15,13 +15,13 @@ enum Constants {
             UIFont(name: "Raleway-Light", size: 23)
         }
         static var titleHearedOpenSans_Light32: UIFont? {
-            UIFont(name: "OpenSans-Light", size: 24)
+            UIFont(name: "OpenSans-Light", size: 22)
         }
         static var titlePostOpenSans_Regular24: UIFont? {
-            UIFont(name: "OpenSans-Regular", size: 24)
+            UIFont(name: "OpenSans-Regular", size: 16)
         }
         static var descriptionPostOpenSans_Regular14: UIFont? {
-            UIFont(name: "OpenSans-Regular", size: 14)
+            UIFont(name: "OpenSans-Regular", size: 12)
         }
         static var sourcePostOpenSans_SemiBold14: UIFont? {
             UIFont(name: "OpenSans-SemiBold", size: 14)

@@ -7,14 +7,21 @@
 
 import Foundation
 import UIKit
+import Combine
 
 class NewsFeedVC: UIViewController {
-    weak var delegateSideMenu: SideMenuDelegate?
     private let viewModel: NewsFeedViewModel
-    private let sideMenu = ContainerVC()
+    private var sideMenu = ContainerVC()
+    private var array: [NewsModelToShow] = []
+    private var cancelable: Set<AnyCancellable> = []
     
     private lazy var menuButton: UIBarButtonItem = {
         let view = UIBarButtonItem(image: UIImage(systemName: "list.dash"), style: .plain, target: self, action: #selector(menuTapped))
+        view.tintColor = Constants.Colors.grey
+        return view
+    }()
+    private lazy var addSourceButton: UIBarButtonItem = {
+        let view = UIBarButtonItem(image: UIImage(systemName: "plus"), style: .plain, target: self, action: #selector(menuTapped))
         view.tintColor = Constants.Colors.grey
         return view
     }()
@@ -27,7 +34,7 @@ class NewsFeedVC: UIViewController {
         let view = UICollectionView(frame: .zero, collectionViewLayout: flow)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = Constants.Colors.backgroundWhite
-        view.contentInset = UIEdgeInsets(top: 15, left: 15, bottom: 10, right: 15)
+        view.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 60, right: 15)
         return view
     }()
     
@@ -45,16 +52,33 @@ class NewsFeedVC: UIViewController {
         setupViews()
         makeConstraints()
         setupGestures()
+        binding()
+        navigationItem.setTitleSubtitle(sub: "Лента")
         view.backgroundColor = Constants.Colors.backgroundWhite
+    }
+    
+    private func binding(){
+        viewModel.$newsArray
+            .sink { array in
+                self.array = array
+                self.collectionView.reloadData()
+            }
+            .store(in: &cancelable)
     }
     
     private func setupViews(){
         view.addSubview(collectionView)
         view.addSubview(sideMenu.view)
-        collectionView.register(CustomCell.self, forCellWithReuseIdentifier: CustomCell.identifire)
+        collectionView.register(CustomCell.self,
+                                forCellWithReuseIdentifier: CustomCell.identifire)
+        collectionView.register(HeaderCollectionView.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                withReuseIdentifier: HeaderCollectionView.identifier)
         collectionView.dataSource = self
         collectionView.delegate = self
+        sideMenu.delegateSideMenu = self
         navigationItem.setLeftBarButton(menuButton, animated: false)
+        navigationItem.setRightBarButton(addSourceButton, animated: false)
     }
     private func makeConstraints(){
         collectionView.snp.makeConstraints { make in
@@ -100,15 +124,47 @@ class NewsFeedVC: UIViewController {
 
 extension NewsFeedVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        3
+        array.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCell.identifire, for: indexPath) as? CustomCell
+        let item = array[indexPath.row]
+        cell?.makeCell(title: item.title, description: item.description, source: item.source, date: item.date, image: item.image)
         cell?.setupLayouts(view: collectionView)
         return cell ?? UICollectionViewCell()
     }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        if kind == UICollectionView.elementKindSectionHeader {
+//            return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderCollectionView.identifier, for: indexPath)
+//        } else {
+//            return UICollectionReusableView()
+//        }
+//    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        return CGSize(width: UIScreen.main.bounds.width, height: 21)
+//    }
+}
+
+extension NewsFeedVC: SideMenuDelegate {
+    func openItem(item: String) {
+        switch item {
+        case "Лента":
+            swipedLeft()
+        case "Избранное":
+            viewModel.openFavorites()
+            swipedLeft()
+        case "Прочитать позже":
+            viewModel.openLater()
+            swipedLeft()
+        case "Ваши подписки":
+            print("Subscriptions")
+        default:
+            break
+        }
     }
 }

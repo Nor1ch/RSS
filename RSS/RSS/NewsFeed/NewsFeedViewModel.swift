@@ -6,12 +6,32 @@
 //
 
 import Foundation
+import Combine
 
 class NewsFeedViewModel {
-//    typealias Routes = 
-    private let router: MainRouter
     
-    init(router: MainRouter){
+    typealias Routes = FavoriteNewsRoute & LaterNewsRoute
+    private let router: Routes
+    
+    init(router: Routes){
         self.router = router
+        cancelable =
+            getNews()
+            .assign(to: \.newsArray, on: self)
+    }
+    
+    @Published var newsArray: [NewsModelToShow] = [] {
+        didSet {
+            print(newsArray)
+        }
+    }
+    private var cancelable: AnyCancellable? = nil
+    
+    
+    func openFavorites(){
+        router.openFavoriteNews()
+    }
+    func openLater(){
+        router.openLaterNews()
     }
 }

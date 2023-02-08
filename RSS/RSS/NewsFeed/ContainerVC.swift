@@ -13,6 +13,7 @@ class ContainerVC: UIViewController {
     private let idCell = "ID"
     private let array: [String] = ["Лента", "Избранное", "Прочитать позже", "Ваши подписки"]
     private var leadingConstraint: NSLayoutConstraint!
+    weak var delegateSideMenu: SideMenuDelegate?
     
     private lazy var headerView: UIView = {
        let view = UIView()
@@ -61,6 +62,7 @@ class ContainerVC: UIViewController {
        let view = UITableView()
         view.separatorStyle = .none
         view.rowHeight = 60
+        view.isScrollEnabled = false
         view.backgroundColor = Constants.Colors.white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -86,6 +88,7 @@ class ContainerVC: UIViewController {
         headerView.addSubview(userImage)
         headerView.addSubview(stackUser)
         tableViewMenu.dataSource = self
+        tableViewMenu.delegate = self
         tableViewMenu.register(UITableViewCell.self, forCellReuseIdentifier: idCell)
         view.frame.origin.x = -UIScreen.main.bounds.width
     }
@@ -138,6 +141,15 @@ class ContainerVC: UIViewController {
             self.view.frame.origin.x = -self.view.frame.width
         }
     }
+    func reloadMenu(){
+        UIView.animate(withDuration: 0.4, delay: 0, options: .curveEaseOut){
+            self.leadingConstraint.constant = self.view.frame.width
+            self.view.layer.opacity = 0
+            self.view.layoutIfNeeded()
+        } completion: { _ in
+            self.view.frame.origin.x = -self.view.frame.width
+        }
+    }
 }
 extension ContainerVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -151,6 +163,11 @@ extension ContainerVC: UITableViewDataSource {
         cell?.textLabel?.font = Constants.Fonts.burgerMenuItemOpenSans_Light18
         return cell ?? UITableViewCell()
     }
-    
-    
+}
+extension ContainerVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let item = array[indexPath.row]
+        delegateSideMenu?.openItem(item: item)
+    }
 }

@@ -11,5 +11,6 @@ import UIKit
 class SubscriptionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .yellow
     }
 }

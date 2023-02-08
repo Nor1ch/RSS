@@ -10,6 +10,7 @@ import UIKit
 
 protocol NewsFeedRoute {
     func makeNewsFeed() -> UIViewController
+    func openNewsFeed()
 }
 
 extension NewsFeedRoute where Self: Router {
@@ -17,10 +18,20 @@ extension NewsFeedRoute where Self: Router {
         let router = MainRouter(rootTransition: EmptyTransition())
         let viewModel = NewsFeedViewModel(router: router)
         let viewController = NewsFeedVC(viewModel: viewModel)
-        router.root = viewController
         let navigation = UINavigationController(rootViewController: viewController)
-        viewController.title = Constants.Text.Navigation.title
+        router.root = viewController
         return navigation
+    }
+    func openNewsFeed(transition: Transition) {
+        let router = MainRouter(rootTransition: EmptyTransition())
+        let viewModel = NewsFeedViewModel(router: router)
+        let viewController = NewsFeedVC(viewModel: viewModel)
+        viewController.title = Constants.Text.Navigation.title
+        router.root = viewController
+        route(to: viewController, as: transition)
+    }
+    func openNewsFeed(){
+        openNewsFeed(transition: PushTransition())
     }
 }
 

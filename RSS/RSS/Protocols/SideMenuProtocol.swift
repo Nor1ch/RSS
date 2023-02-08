@@ -8,5 +8,5 @@
 import Foundation
 
 protocol SideMenuDelegate: AnyObject {
-    func menuButtonTapped()
+    func openItem(item: String)
 }
