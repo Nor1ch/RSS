@@ -11,6 +11,8 @@ import SnapKit
 
 class CustomCell: UICollectionViewCell {
     static let identifire = "CustomCell"
+    var delegateButtonTapped: GestureColletionViewCellDelegate?
+    private var flag = true
     
     
     private var imageViewNews: UIImageView = {
@@ -62,20 +64,30 @@ class CustomCell: UICollectionViewCell {
         view.spacing = 10
         return view
     }()
+    private lazy var favButton: UIButton = {
+        let view = UIButton()
+        view.setImage(UIImage(systemName: "bookmark"), for: .normal)
+        return view
+    }()
+    private lazy var laterButton: UIButton = {
+        let view = UIButton()
+        view.setImage(UIImage(systemName: "stopwatch.fill"), for: .normal)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(laterTapped))
+        view.addGestureRecognizer(gesture)
+        return view
+    }()
+    private lazy var shareButton: UIButton = {
+        let view = UIButton()
+        view.setImage(UIImage(systemName: "link"), for: .normal)
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(shareTapped))
+        view.addGestureRecognizer(gesture)
+        return view
+    }()
     
     private var stackButtons: UIStackView = {
-        let favButton = UIButton()
-        favButton.setImage(UIImage(systemName: "heart"), for: .normal)
-        let laterButton = UIButton()
-        laterButton.setImage(UIImage(systemName: "square"), for: .normal)
-        let shareButton = UIButton()
-        shareButton.setImage(UIImage(systemName: "pencil"), for: .normal)
         let view = UIStackView()
         view.axis = .horizontal
         view.distribution = .fillEqually
-        view.addArrangedSubview(favButton)
-        view.addArrangedSubview(laterButton)
-        view.addArrangedSubview(shareButton)
         return view
     }()
     private var labelempty: UILabel = {
@@ -115,9 +127,33 @@ class CustomCell: UICollectionViewCell {
         stackInfos.addArrangedSubview(postedTimeNews)
         stackText.addArrangedSubview(titleNews)
         stackText.addArrangedSubview(descriptionNews)
+        stackButtons.addArrangedSubview(favButton)
+        stackButtons.addArrangedSubview(laterButton)
+        stackButtons.addArrangedSubview(shareButton)
         stackBottom.addArrangedSubview(stackInfos)
         stackBottom.addArrangedSubview(labelempty)
         stackBottom.addArrangedSubview(stackButtons)
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(favTapped))
+        favButton.addGestureRecognizer(gesture)
+        
+      
+    }
+    @objc private func favTapped(){
+        delegateButtonTapped?.buttonPressed(string: "fav")
+        if flag {
+            favButton.tintColor = .red
+            flag = false
+        } else {
+            favButton.tintColor = .gray
+            flag = true
+        }
+    }
+    @objc private func shareTapped(){
+        delegateButtonTapped?.buttonPressed(string: "share")
+    }
+    @objc private func laterTapped(){
+        delegateButtonTapped?.buttonPressed(string: "later")
     }
     private func makeConstraints(){
         stackButtons.snp.makeConstraints { make in

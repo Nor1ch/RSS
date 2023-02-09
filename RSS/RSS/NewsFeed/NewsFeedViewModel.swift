@@ -20,11 +20,7 @@ class NewsFeedViewModel {
             .assign(to: \.newsArray, on: self)
     }
     
-    @Published var newsArray: [NewsModelToShow] = [] {
-        didSet {
-            print(newsArray)
-        }
-    }
+    @Published var newsArray: [NewsModelToShow] = []
     private var cancelable: AnyCancellable? = nil
     
     

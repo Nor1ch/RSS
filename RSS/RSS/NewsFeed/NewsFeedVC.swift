@@ -38,6 +38,13 @@ class NewsFeedVC: UIViewController {
         return view
     }()
     
+    private lazy var indicator: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .large)
+        view.color = Constants.Colors.lightGreen
+        view.frame = CGRect(x: 0, y: 0, width: 150, height: 150)
+        return view
+    }()
+    
     init(viewModel: NewsFeedViewModel){
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -60,15 +67,20 @@ class NewsFeedVC: UIViewController {
     private func binding(){
         viewModel.$newsArray
             .sink { array in
+                if !array.isEmpty {
                 self.array = array
                 self.collectionView.reloadData()
-            }
+                self.indicator.stopAnimating()
+                    }
+                }
             .store(in: &cancelable)
     }
     
     private func setupViews(){
         view.addSubview(collectionView)
         view.addSubview(sideMenu.view)
+        collectionView.addSubview(indicator)
+        indicator.startAnimating()
         collectionView.register(CustomCell.self,
                                 forCellWithReuseIdentifier: CustomCell.identifire)
         collectionView.register(HeaderCollectionView.self,
@@ -81,6 +93,10 @@ class NewsFeedVC: UIViewController {
         navigationItem.setRightBarButton(addSourceButton, animated: false)
     }
     private func makeConstraints(){
+        indicator.snp.makeConstraints { make in
+            make.centerY.equalTo(self.view.snp.centerY)
+            make.centerX.equalTo(self.view.snp.centerX)
+        }
         collectionView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
@@ -131,6 +147,7 @@ extension NewsFeedVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CustomCell.identifire, for: indexPath) as? CustomCell
         let item = array[indexPath.row]
         cell?.makeCell(title: item.title, description: item.description, source: item.source, date: item.date, image: item.image)
+        cell?.delegateButtonTapped = self
         cell?.setupLayouts(view: collectionView)
         return cell ?? UICollectionViewCell()
     }
@@ -148,6 +165,10 @@ extension NewsFeedVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLa
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
 //        return CGSize(width: UIScreen.main.bounds.width, height: 21)
 //    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print(array[indexPath.row])
+    }
 }
 
 extension NewsFeedVC: SideMenuDelegate {
@@ -167,4 +188,21 @@ extension NewsFeedVC: SideMenuDelegate {
             break
         }
     }
+}
+
+extension NewsFeedVC: GestureColletionViewCellDelegate {
+    func buttonPressed(string: String) {
+        switch string {
+        case "fav":
+            print("delegate fav")
+        case "share":
+            print("delegate share")
+        case "later":
+            print("delegate later")
+        default:
+            break
+        }
+    }
+    
+    
 }
